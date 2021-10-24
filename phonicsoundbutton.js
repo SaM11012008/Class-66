@@ -3,6 +3,17 @@ import { StyleSheet, Text, View, SafeAreaView, TextInput, TextComponent, Touchab
 import { Audio } from 'expo-av';
 export default class PhonicSoundButton extends React.Component {
 
+    constructor(props) {
+
+        super(props);
+
+        this.state = {
+            pressButtonIndex:""
+        }
+
+
+    }
+
     playSound = async (soundChunk) => {
         var soundLink = "https://s3-whitehatjrcontent.whjr.online/phones/" + soundChunk + ".mp3";
 
@@ -13,12 +24,21 @@ export default class PhonicSoundButton extends React.Component {
     }
 
 
+
     render() {
         return (
-            <TouchableOpacity style={styles.chunkButton}
+            <TouchableOpacity
                 onPress={() => {
+                    this.setState({ pressButtonIndex: this.props.buttonIndex })
                     this.playSound(this.props.soundChunk)
-                }}> <Text style={styles.displayText}> {this.props.wordChunk} </Text> </TouchableOpacity>
+                }}
+                style={this.props.buttonIndex === this.state.pressButtonIndex ?
+                    [styles.chunkButton, { backgroundColor: "white" }] :
+                    [styles.chunkButton, { backgroundColor: "red" }]}
+            > <Text style={this.props.buttonIndex === this.state.pressButtonIndex ?
+                [styles.displayText, { color: "red" }] :
+                [styles.displayText, { color: "white" }]
+            }> {this.props.wordChunk} </Text> </TouchableOpacity>
         )
     }
 }
@@ -40,5 +60,7 @@ const styles = StyleSheet.create({
         margin: 5,
         backgroundColor: 'red'
     }
+
+
 })
 

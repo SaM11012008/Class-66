@@ -24,51 +24,58 @@ export default class App extends React.Component {
   render() {
     return (
 
-       <SafeAreaProvider> 
+      <SafeAreaProvider>
 
-      <View style={styles.container}>
-        <Header
-          backgroundColor={'#9c8210'}
-          centerComponent={{
-            text: 'Monkey Chunky',
-            style: { color: '#fff', fontSize: 20 },
-          }}
-        />
+        <View style={styles.container}>
+          <Header
+            backgroundColor={'#9c8210'}
+            centerComponent={{
+              text: 'Monkey Chunky',
+              style: { color: '#fff', fontSize: 20 },
+            }}
+          />
 
-        <Image
-          style={styles.imageIcon}
-          source={{
-            uri:
-              'https://www.shareicon.net/data/128x128/2015/08/06/80805_face_512x512.png',
-          }}
-        />
+          <Image
+            style={styles.imageIcon}
+            source={{
+              uri:
+                'https://www.shareicon.net/data/128x128/2015/08/06/80805_face_512x512.png',
+            }}
+          />
 
-        <TextInput
-          style={styles.inputBox}
-          onChangeText={text => {
-            this.setState({ text: text });
-          }}
-          value={this.state.text}
-        />
-        <TouchableOpacity
-          style={styles.goButton}
-          onPress={() => {
-            this.setState({ chunks: db[this.state.text].chunks });
-            this.setState({ phonicSounds: db[this.state.text].phones });
-          }}>
-          <Text style={styles.buttonText}>GO</Text>
-        </TouchableOpacity>
-        <View>
-          {this.state.chunks.map((item, index) => {
-            return (
-              <PhonicSoundButton
-                wordChunk={this.state.chunks[index]}
-                soundChunk={this.state.phonicSounds[index]}
-              />
-            );
-          })}
+          <TextInput
+            style={styles.inputBox}
+            onChangeText={text => {
+              this.setState({ text: text });
+            }}
+            value={this.state.text}
+          />
+
+          <TouchableOpacity
+            style={styles.goButton}
+            onPress={() => {
+              var word = this.state.text.toLocaleLowerCase().trim()
+              db[word] ? (
+                this.setState({ chunks: db[word].chunks }),
+                this.setState({ phonicSounds: db[word].phones })
+              ) : alert("This word doesnt exist in our database");
+
+
+            }}>
+            <Text style={styles.buttonText}>GO</Text>
+          </TouchableOpacity>
+          <View>
+            {this.state.chunks.map((item, index) => {
+              return (
+                <PhonicSoundButton
+                  wordChunk={this.state.chunks[index]}
+                  soundChunk={this.state.phonicSounds[index]}
+                  buttonIndex={index}
+                />
+              );
+            })}
+          </View>
         </View>
-      </View>
       </SafeAreaProvider>
     );
   }
@@ -103,6 +110,6 @@ const styles = StyleSheet.create({
   imageIcon: {
     width: 150,
     height: 150,
-    marginLeft: 95,
+    marginLeft: 700,
   }
 });
